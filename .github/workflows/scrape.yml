@@ -9,6 +9,8 @@ on:
 jobs:
   scrape-and-update:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       contents: write
       
@@ -41,7 +43,10 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add schedule/ downloaded-images/ scrape.log
+          
+          if [ -d "schedule" ]; then git add schedule/; fi
+          if [ -d "downloaded-images" ]; then git add downloaded-images/; fi
+          if [ -f "scrape.log" ]; then git add scrape.log; fi
           
           # Only commit if there are changes
           if git diff --staged --quiet; then
