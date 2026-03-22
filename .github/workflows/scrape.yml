@@ -55,3 +55,32 @@ jobs:
             git commit -m "Update schedules and images [skip ci]"
             git push
           fi
+
+      - name: Sync Schedule to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          # Syncs the local schedule folder to the root 'schedule' folder in R2
+          aws s3 sync schedule/ s3://programaciontv/schedule/ \
+            --endpoint-url https://50e4a65f087212ff2d4e1b79caa134ec.r2.cloudflarestorage.com \
+            --delete
+
+      - name: Sync Images to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          # Syncs the local downloaded-images folder to wp-admin/uploads/downloaded-images in R2
+          aws s3 sync downloaded-images/ s3://programaciontv/wp-admin/uploads/downloaded-images/ \
+            --endpoint-url https://50e4a65f087212ff2d4e1b79caa134ec.r2.cloudflarestorage.com \
+            --delete
+
+      - name: Purge Cloudflare Cache
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/6268c94174ccecb6c0c43f5c760131df/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}'
