@@ -25,7 +25,7 @@ console_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
-BASE_DIR = "/Users/rishipandey/Projects/intv-nextjs/firebase-imported/python-script-for-mexico"
+# BASE_DIR = "/Users/rishipandey/Projects/intv-nextjs/firebase-imported/python-script-for-mexico"  <-- Delete this line entirely
 SCHEDULE_DIR = os.path.join(BASE_DIR, "schedule")
 IMAGES_DIR = os.path.join(BASE_DIR, "downloaded-images")
 CDN_BASE = "https://cdn.programaciontv.com.mx/wp-content/uploads/downloaded-images"
