@@ -74,7 +74,7 @@ jobs:
           AWS_DEFAULT_REGION: auto
         run: |
           # Syncs the local downloaded-images folder to wp-admin/uploads/downloaded-images in R2
-          aws s3 sync downloaded-images/ s3://programaciontv/wp-admin/uploads/downloaded-images/ \
+          aws s3 sync downloaded-images/ s3://programaciontv/wp-content/uploads/downloaded-images/ \
             --endpoint-url https://50e4a65f087212ff2d4e1b79caa134ec.r2.cloudflarestorage.com \
             --delete
 
