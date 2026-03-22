@@ -1,25 +1,31 @@
-2026-03-22 18:03:20 - INFO - Starting schedule scraping for 8 channels using 20 workers...
-2026-03-22 18:03:21 - ERROR - [FAILED] tv-unam: No shows today or tomorrow
-2026-03-22 18:03:21 - ERROR - [FAILED] de-pelicula: No shows today or tomorrow
-2026-03-22 18:03:21 - INFO - [SUCCESS] history: Saved 57 items.
-2026-03-22 18:03:21 - INFO - [SUCCESS] discovery-channel: Saved 56 items.
-2026-03-22 18:03:21 - INFO - [SUCCESS] fx: Saved 38 items.
-2026-03-22 18:03:21 - INFO - [SUCCESS] antena3: Saved 66 items.
-2026-03-22 18:03:21 - INFO - [SUCCESS] espn: Saved 26 items.
-2026-03-22 18:03:22 - INFO - [SUCCESS] discovery-kids: Saved 186 items.
-2026-03-22 18:03:22 - INFO - 
+2026-03-22 18:36:55 - INFO - Starting schedule scraping for 8 channels using 20 workers...
+2026-03-22 18:36:55 - ERROR - [FAILED] de-pelicula: No shows today or tomorrow
+2026-03-22 18:36:55 - ERROR - [FAILED] tv-unam: No shows today or tomorrow
+2026-03-22 18:36:56 - INFO - [SUCCESS] history: Saved 57 items.
+2026-03-22 18:36:56 - INFO - [SUCCESS] espn: Saved 26 items.
+2026-03-22 18:36:56 - INFO - [SUCCESS] fx: Saved 38 items.
+2026-03-22 18:36:56 - INFO - [SUCCESS] antena3: Saved 66 items.
+2026-03-22 18:36:56 - INFO - [SUCCESS] discovery-channel: Saved 56 items.
+2026-03-22 18:36:56 - INFO - [SUCCESS] discovery-kids: Saved 186 items.
+2026-03-22 18:36:56 - INFO - 
 ========================================
 EPG.LOGO SUMMARY - SCRAPING COMPLETED
 ========================================
 Successfully configured channels (6):
-  history, discovery-channel, fx, antena3, espn, discovery-kids
+  history, espn, fx, antena3, discovery-channel, discovery-kids
 ----------------------------------------
 FAILED CHANNELS (2) >>> REQUIRES ATTENTION:
-  - tv-unam
   - de-pelicula
+  - tv-unam
 ========================================
-2026-03-22 18:03:22 - INFO - No schedule directory found. Exiting gracefully.
-2026-03-22 23:48:38 - INFO - Scanning JSON files for logos...
-2026-03-22 23:48:38 - INFO - Found 225 unique images to download.
-2026-03-22 23:48:38 - INFO - Starting downloads with 40 threads...
-2026-03-22 23:49:23 - INFO - [50/225] Downloaded: 5.5 KB
+2026-03-22 18:36:56 - INFO - Scanning JSON files for logos...
+2026-03-22 18:36:56 - INFO - Found 225 unique images to download.
+2026-03-22 18:36:56 - INFO - Starting downloads with 50 threads...
+2026-03-22 18:36:57 - INFO - [50/225] Downloaded: 10.3 KB
+2026-03-22 18:36:58 - INFO - [100/225] Downloaded: 2.9 KB
+2026-03-22 18:36:59 - INFO - [150/225] Downloaded: 6.0 KB
+2026-03-22 18:37:00 - INFO - [200/225] Downloaded: 5.4 KB
+2026-03-22 18:37:00 - INFO - [225/225] Downloaded: 5.4 KB
+2026-03-22 18:37:00 - INFO - Download summary: 225 successful, 0 failed.
+2026-03-22 18:37:00 - INFO - Updating 6 JSON files...
+2026-03-22 18:37:00 - INFO - Done! Image scraping & replacement complete.
