@@ -30,12 +30,14 @@ MX_TZ = timezone(timedelta(hours=-6))
 
 def parse_time_str(time_str):
     time_str = time_str.strip().lower()
-    # E.g. "6:00am", "12:00pm", "1:30pm"
-    return datetime.strptime(time_str, "%I:%M%p").time()
+    try:
+        return datetime.strptime(time_str, "%H:%M").time()
+    except ValueError:
+        return datetime.strptime(time_str, "%I:%M%p").time()
 
 def fetch_schedule_page(channel, rel_day):
     # rel_day can be 'ayer', '', 'manana'
-    url = f"https://mi.tv/co/async/channel/{channel}/{rel_day}/-360" if rel_day else f"https://mi.tv/co/async/channel/{channel}/-360"
+    url = f"https://mi.tv/mx/async/channel/{channel}/{rel_day}/-360" if rel_day else f"https://mi.tv/mx/async/channel/{channel}/-360"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         "Accept": "text/html"
