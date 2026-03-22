@@ -64,8 +64,10 @@ def download_and_compress(url, local_path):
 
 def main():
     if not os.path.exists(SCHEDULE_DIR):
-        logger.info("No schedule directory found. Exiting gracefully.")
-        return
+        os.makedirs(SCHEDULE_DIR, exist_ok=True)
+        
+    if not os.path.exists(IMAGES_DIR):
+        os.makedirs(IMAGES_DIR, exist_ok=True)
 
     # original_url -> new_cdn_url mapping
     url_to_cdn = {}
