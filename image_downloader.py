@@ -7,7 +7,7 @@ from io import BytesIO
 from PIL import Image
 import concurrent.futures
 
-BASE_DIR = "/Users/rishipandey/Projects/intv-nextjs/firebase-imported/python-script-for-mexico"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_FILE = os.path.join(BASE_DIR, "scrape.log")
 
 # Setup logging

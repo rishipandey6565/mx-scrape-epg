@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 import concurrent.futures
 
 # Configure logging to overwrite the scrape.log file on every run
-BASE_DIR = "/Users/rishipandey/Projects/intv-nextjs/firebase-imported/python-script-for-mexico"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_FILE = os.path.join(BASE_DIR, "scrape.log")
 
 # Setup logging
