@@ -1,21 +1,21 @@
-2026-03-22 17:17:20 - INFO - Starting schedule scraping for 8 channels using 20 workers...
-2026-03-22 17:17:20 - ERROR - [FAILED] tv-unam: No shows today or tomorrow
-2026-03-22 17:17:20 - ERROR - [FAILED] de-pelicula: No shows today or tomorrow
-2026-03-22 17:17:21 - INFO - [SUCCESS] antena3: Saved 66 items.
-2026-03-22 17:17:21 - INFO - [SUCCESS] history: Saved 57 items.
-2026-03-22 17:17:21 - INFO - [SUCCESS] espn: Saved 26 items.
-2026-03-22 17:17:21 - INFO - [SUCCESS] fx: Saved 38 items.
-2026-03-22 17:17:21 - INFO - [SUCCESS] discovery-channel: Saved 56 items.
-2026-03-22 17:17:21 - INFO - [SUCCESS] discovery-kids: Saved 186 items.
-2026-03-22 17:17:21 - INFO - 
+2026-03-22 18:03:20 - INFO - Starting schedule scraping for 8 channels using 20 workers...
+2026-03-22 18:03:21 - ERROR - [FAILED] tv-unam: No shows today or tomorrow
+2026-03-22 18:03:21 - ERROR - [FAILED] de-pelicula: No shows today or tomorrow
+2026-03-22 18:03:21 - INFO - [SUCCESS] history: Saved 57 items.
+2026-03-22 18:03:21 - INFO - [SUCCESS] discovery-channel: Saved 56 items.
+2026-03-22 18:03:21 - INFO - [SUCCESS] fx: Saved 38 items.
+2026-03-22 18:03:21 - INFO - [SUCCESS] antena3: Saved 66 items.
+2026-03-22 18:03:21 - INFO - [SUCCESS] espn: Saved 26 items.
+2026-03-22 18:03:22 - INFO - [SUCCESS] discovery-kids: Saved 186 items.
+2026-03-22 18:03:22 - INFO - 
 ========================================
 EPG.LOGO SUMMARY - SCRAPING COMPLETED
 ========================================
 Successfully configured channels (6):
-  antena3, history, espn, fx, discovery-channel, discovery-kids
+  history, discovery-channel, fx, antena3, espn, discovery-kids
 ----------------------------------------
 FAILED CHANNELS (2) >>> REQUIRES ATTENTION:
   - tv-unam
   - de-pelicula
 ========================================
-2026-03-22 17:17:21 - ERROR - No schedule directory found.
+2026-03-22 18:03:22 - INFO - No schedule directory found. Exiting gracefully.
