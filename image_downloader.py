@@ -29,6 +29,7 @@ logger.addHandler(console_handler)
 SCHEDULE_DIR = os.path.join(BASE_DIR, "schedule")
 IMAGES_DIR = os.path.join(BASE_DIR, "downloaded-images")
 CDN_BASE = "https://cdn.programaciontv.com.mx/wp-content/uploads/downloaded-images"
+FALLBACK_URL = "https://programaciontv.com.mx/wp-content/uploads/2026/01/pexels-caleboquendo-8254900.webp"
 
 def slugify(text):
     text = text.lower()
@@ -93,7 +94,13 @@ def main():
                 for show in value:
                     original_url = show.get("logo")
                     
-                    if not original_url or not original_url.startswith("http") or original_url.startswith(CDN_BASE):
+                    if not original_url or not original_url.startswith("http") or original_url.startswith(CDN_BASE) or original_url == FALLBACK_URL:
+                        continue
+                        
+                    if "fallback" in original_url.lower():
+                        url_to_cdn[original_url] = FALLBACK_URL
+                        show["logo"] = FALLBACK_URL
+                        changed = True
                         continue
                         
                     if original_url in url_to_cdn:
@@ -131,6 +138,8 @@ def main():
     successful = 0
     failed = 0
     
+    failed_cdn_urls = set()
+    
     # Configurable threading
     max_workers = int(os.environ.get("IMAGE_WORKERS", "40"))
     
@@ -156,6 +165,7 @@ def main():
                 else:
                     failed += 1
                     logger.error(f"Failed to download {orig_url}: {result}")
+                    failed_cdn_urls.add(url_to_cdn[orig_url])
                     
     logger.info(f"Download summary: {successful} successful, {failed} failed.")
     
@@ -163,6 +173,13 @@ def main():
     if modified_files:
         logger.info(f"Updating {len(modified_files)} JSON files...")
         for filepath, data in modified_files:
+            if failed_cdn_urls:
+                for key, value in data.items():
+                    if isinstance(value, list) and key != "channel":
+                        for show in value:
+                            if show.get("logo") in failed_cdn_urls:
+                                show["logo"] = FALLBACK_URL
+                                
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
                 
