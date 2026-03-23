@@ -182,13 +182,10 @@ def generate_channel_schedule(channel):
             date_list = final_output[yesterday_str]
             
         if date_list is not None:
-            slug = slugify(s["name"])
-            logo_url = f"{CDN_BASE}/{channel}/{slug}.webp"
-            
             new_show = {
                 "show": s["name"],
                 "category": s["category"],
-                "logo": logo_url,
+                "logo": s["logo"],
                 "start": s["start_dt"].strftime("%H:%M"),
                 "end": s["end_dt"].strftime("%H:%M")
             }
@@ -270,7 +267,15 @@ def main():
                 logger.info(f"[SUCCESS] {ch}: Saved {result} items.")
                 successful.append(ch)
                 if schedule and today_str in schedule:
-                    all_channels_today[ch] = schedule[today_str]
+                    today_shows = []
+                    for show in schedule[today_str]:
+                        show_copy = show.copy()
+                        original_logo = show_copy.get("logo")
+                        if original_logo and original_logo.startswith("http") and not original_logo.startswith(CDN_BASE):
+                            slug = slugify(show_copy["show"])
+                            show_copy["logo"] = f"{CDN_BASE}/{ch}/{slug}.webp"
+                        today_shows.append(show_copy)
+                    all_channels_today[ch] = today_shows
             else:
                 logger.error(f"[FAILED] {ch}: {result}")
                 failed.append(ch)
