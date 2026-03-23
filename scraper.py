@@ -1,10 +1,18 @@
 import os
+import re
 import json
 import requests
 import logging
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, timezone
 import concurrent.futures
+
+CDN_BASE = "https://cdn.programaciontv.com.mx/wp-content/uploads/downloaded-images"
+
+def slugify(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z0-9]+', '-', text)
+    return text.strip('-')
 
 # Configure logging to overwrite the scrape.log file on every run
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -152,24 +160,50 @@ def generate_channel_schedule(channel):
         "channel": channel,
     }
     
-    # Initialize date keys
+    yesterday_str = yesterday.isoformat()
     today_str = today.isoformat()
     tomorrow_str = tomorrow.isoformat()
+    
+    final_output[yesterday_str] = []
     final_output[today_str] = []
     final_output[tomorrow_str] = []
     
+    yesterday_23 = datetime.combine(yesterday, datetime.strptime("23:00", "%H:%M").time()).replace(tzinfo=MX_TZ)
+    
     for s in sorted_shows:
         s_date = s["start_dt"].date()
-        if s_date == today or s_date == tomorrow:
-            date_str = s_date.isoformat()
-            final_output[date_str].append({
+        date_list = None
+        
+        if s_date == today:
+            date_list = final_output[today_str]
+        elif s_date == tomorrow:
+            date_list = final_output[tomorrow_str]
+        elif s_date == yesterday and s["end_dt"] > yesterday_23:
+            date_list = final_output[yesterday_str]
+            
+        if date_list is not None:
+            slug = slugify(s["name"])
+            logo_url = f"{CDN_BASE}/{channel}/{slug}.webp"
+            
+            new_show = {
                 "show": s["name"],
                 "category": s["category"],
-                "logo": s["logo"],
+                "logo": logo_url,
                 "start": s["start_dt"].strftime("%H:%M"),
                 "end": s["end_dt"].strftime("%H:%M")
-            })
+            }
+            if date_list and date_list[-1]["show"] == new_show["show"] and date_list[-1]["category"] == new_show["category"] and date_list[-1]["end"] == new_show["start"]:
+                date_list[-1]["end"] = new_show["end"]
+            else:
+                date_list.append(new_show)
             
+    if not final_output[yesterday_str]:
+        del final_output[yesterday_str]
+    if not final_output[today_str]:
+        del final_output[today_str]
+    if not final_output[tomorrow_str]:
+        del final_output[tomorrow_str]
+        
     return final_output
 
 def process_channel(channel, schedule_dir):
@@ -179,18 +213,18 @@ def process_channel(channel, schedule_dir):
             # Check if there's actually any item
             has_items = sum(len(shows) for key, shows in schedule.items() if isinstance(shows, list)) > 0
             if not has_items:
-                return channel, False, "No shows today or tomorrow"
+                return channel, False, "No shows today or tomorrow", None
                 
             json_path = os.path.join(schedule_dir, f"{channel}.json")
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(schedule, f, ensure_ascii=False, separators=(',', ':'))
                 
             total_items = sum(len(shows) for key, shows in schedule.items() if isinstance(shows, list))
-            return channel, True, total_items
+            return channel, True, total_items, schedule
         else:
-            return channel, False, "No schedule parsed"
+            return channel, False, "No schedule parsed", None
     except Exception as e:
-        return channel, False, str(e)
+        return channel, False, str(e), None
 
 def main():
     if not os.path.exists(BASE_DIR):
@@ -215,6 +249,9 @@ def main():
     # Read configure from env or default based on gh actions capabilities
     max_workers = int(os.environ.get("SCRAPE_WORKERS", "20"))
     
+    all_channels_today = {}
+    today_str = datetime.now(MX_TZ).date().isoformat()
+    
     # Process multiple channels in parallel
     logger.info(f"Starting schedule scraping for {len(channels)} channels using {max_workers} workers...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -223,18 +260,26 @@ def main():
         }
         for future in concurrent.futures.as_completed(future_to_channel):
             ch = future_to_channel[future]
-            success, result = False, "Unknown Error"
+            success, result, schedule = False, "Unknown Error", None
             try:
-                ch, success, result = future.result()
+                ch, success, result, schedule = future.result()
             except Exception as e:
                 result = str(e)
                 
             if success:
                 logger.info(f"[SUCCESS] {ch}: Saved {result} items.")
                 successful.append(ch)
+                if schedule and today_str in schedule:
+                    all_channels_today[ch] = schedule[today_str]
             else:
                 logger.error(f"[FAILED] {ch}: {result}")
                 failed.append(ch)
+                
+    if all_channels_today:
+        all_channel_path = os.path.join(schedule_dir, "all-channel.json")
+        with open(all_channel_path, "w", encoding="utf-8") as f:
+            json.dump(all_channels_today, f, ensure_ascii=False, separators=(',', ':'))
+        logger.info(f"Saved all-channel.json with {len(all_channels_today)} channels for today.")
                 
     # Print the epg.logo summary
     summary_msg = "\n" + "="*40 + "\n"
