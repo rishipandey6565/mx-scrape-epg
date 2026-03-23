@@ -75,7 +75,7 @@ def main():
     # original_url -> local path for downloading
     download_tasks = {}
     
-    json_files = [f for f in os.listdir(SCHEDULE_DIR) if f.endswith('.json')]
+    json_files = [f for f in os.listdir(SCHEDULE_DIR) if f.endswith('.json') and f != "all-channel.json"]
     modified_files = []
     
     # Pass 1: Gather URLs and map them
