@@ -1,0 +1,40 @@
+fx----------------------------FX
+de-pelicula-------------------De Película
+discovery-kids----------------Discovery Kids
+discovery-channel-------------Discovery Channel
+espn--------------------------ESPN
+history-----------------------History Channel
+tv-unam-------------------------TV UNAM
+xeipn-canal-11-----------------Canal Once
+canal-22-conaculta-------------Canal 22
+canal-21-nacional--------------Capital 21
+canal-5-galavision-------------Canal 5 Galavision
+canal-44-udgtv-----------------Canal 44 - udgtv
+tnt-hd-------------------------TNT HD
+tcm----------------------------TCM
+golf-channel-------------------Golf Channel
+cnn-en-espanol-----------------CNN en Español
+el-financiero-bloomberg--------Bloomberg
+bbc-world----------------------BBC World News            ***not matched colombian
+nuestra-tele-noticias-24hs-----NTN24
+antena3-----------------------Antena 3
+galicia-tv--------------------Galicia TV
+azteca-13---------------------Azteca Uno
+canal-de-las-estrellas-xew-----Las Estrellas
+xh-gc-canal-5
+cadenatres--------------------Excélsior TV
+canal-4-foro-tv---------------FOROtv
+proyecto-40-------------------adn40
+a-plus------------------------A+
+fox---------------------------Star Channel
+sony--------------------------Sony
+warner-------------------------Warner Channel
+universal-channel--------------Universal TV
+a-e-mundo----------------------A&E
+axn----------------------------AXN
+hola-tv------------------------Hola TV
+az-corazon---------------------Az Corazón
+entertainment------------------E!
+discovery-id-------------------Investigation Discovery
+el-gourmet--------------------El Gourmet
+distrito-comedia--------------Distrito Comedia
