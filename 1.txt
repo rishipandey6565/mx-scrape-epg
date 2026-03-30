@@ -7,18 +7,18 @@ history-----------------------History Channel
 tv-unam-------------------------TV UNAM
 xeipn-canal-11-----------------Canal Once
 canal-22-conaculta-------------Canal 22
-canal-21-nacional--------------Capital 21
+canal-21-nacional--------------Capital 21                 ***not found
 canal-5-galavision-------------Canal 5 Galavision
 canal-44-udgtv-----------------Canal 44 - udgtv
 tnt-hd-------------------------TNT HD
 tcm----------------------------TCM
-golf-channel-------------------Golf Channel
+golf-channel-------------------Golf Channel          *** not found
 cnn-en-espanol-----------------CNN en Español
 el-financiero-bloomberg--------Bloomberg
 bbc-world----------------------BBC World News            ***not matched colombian
-nuestra-tele-noticias-24hs-----NTN24
-antena3-----------------------Antena 3
-galicia-tv--------------------Galicia TV
+nuestra-tele-noticias-24hs-----NTN24              *** not found
+antena3-----------------------Antena 3                  *** not found
+galicia-tv--------------------Galicia TV             ***not found
 azteca-13---------------------Azteca Uno
 canal-de-las-estrellas-xew-----Las Estrellas
 xh-gc-canal-5------------------Canal 5
@@ -32,7 +32,7 @@ warner-------------------------Warner Channel
 universal-channel--------------Universal TV
 a-e-mundo----------------------A&E
 axn----------------------------AXN
-hola-tv------------------------Hola TV
+hola-tv------------------------Hola TV                    **** not found
 az-corazon---------------------Az Corazón
 entertainment------------------E!
 discovery-id-------------------Investigation Discovery
