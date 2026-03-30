@@ -21,7 +21,7 @@ antena3-----------------------Antena 3
 galicia-tv--------------------Galicia TV
 azteca-13---------------------Azteca Uno
 canal-de-las-estrellas-xew-----Las Estrellas
-xh-gc-canal-5
+xh-gc-canal-5------------------Canal 5
 cadenatres--------------------Excélsior TV
 canal-4-foro-tv---------------FOROtv
 proyecto-40-------------------adn40
