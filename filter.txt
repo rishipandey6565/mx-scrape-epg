@@ -38,3 +38,6 @@ entertainment
 discovery-id
 el-gourmet
 distrito-comedia
+space
+tooncast
+cinemax
