@@ -41,3 +41,8 @@ distrito-comedia
 space
 tooncast
 cinemax
+tlnovelas
+galavision
+tve
+cinecanal
+golden
