@@ -46,3 +46,8 @@ galavision
 tve
 cinecanal
 golden
+fox-sports
+national-geographic
+disney
+canal-4
+azteca-7
