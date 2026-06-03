@@ -51,3 +51,9 @@ national-geographic
 disney
 canal-4
 azteca-7
+hbo-oeste
+golden-edge
+hbo-plus-mexico
+fox-sports-3
+tvc-cine-mexicano-cmc
+comedy-central
