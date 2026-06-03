@@ -57,3 +57,4 @@ hbo-plus-mexico
 fox-sports-3
 tvc-cine-mexicano-cmc
 comedy-central
+discovery-home-and-health
