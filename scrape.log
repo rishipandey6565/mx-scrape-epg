@@ -1,109 +1,108 @@
-2026-07-19 12:39:10 - INFO - Starting schedule scraping for 60 channels using 20 workers...
-2026-07-19 12:39:11 - ERROR - [FAILED] golf-channel: No shows today or tomorrow
-2026-07-19 12:39:11 - INFO - [SUCCESS] xeipn-canal-11: Saved 23 items.
-2026-07-19 12:39:11 - ERROR - [FAILED] canal-21-nacional: No shows today or tomorrow
-2026-07-19 12:39:12 - ERROR - [FAILED] antena3: No shows today or tomorrow
-2026-07-19 12:39:12 - INFO - [SUCCESS] canal-5-galavision: Saved 35 items.
-2026-07-19 12:39:12 - INFO - [SUCCESS] cnn-en-espanol: Saved 56 items.
-2026-07-19 12:39:12 - INFO - [SUCCESS] discovery-channel: Saved 52 items.
-2026-07-19 12:39:12 - INFO - [SUCCESS] de-pelicula: Saved 29 items.
-2026-07-19 12:39:12 - ERROR - [FAILED] bbc-world: No shows today or tomorrow
-2026-07-19 12:39:12 - ERROR - [FAILED] nuestra-tele-noticias-24hs: No shows today or tomorrow
-2026-07-19 12:39:12 - INFO - [SUCCESS] canal-22-conaculta: Saved 40 items.
-2026-07-19 12:39:12 - INFO - [SUCCESS] tv-unam: Saved 43 items.
-2026-07-19 12:39:12 - INFO - [SUCCESS] tnt-hd: Saved 36 items.
-2026-07-19 12:39:12 - ERROR - [FAILED] galicia-tv: No shows today or tomorrow
-2026-07-19 12:39:12 - INFO - [SUCCESS] fx: Saved 25 items.
-2026-07-19 12:39:12 - INFO - [SUCCESS] espn: Saved 24 items.
-2026-07-19 12:39:12 - INFO - [SUCCESS] tcm: Saved 44 items.
-2026-07-19 12:39:13 - INFO - [SUCCESS] el-financiero-bloomberg: Saved 55 items.
-2026-07-19 12:39:13 - INFO - [SUCCESS] history: Saved 66 items.
-2026-07-19 12:39:13 - ERROR - [FAILED] hola-tv: No shows today or tomorrow
-2026-07-19 12:39:13 - INFO - [SUCCESS] canal-de-las-estrellas-xew: Saved 36 items.
-2026-07-19 12:39:13 - INFO - [SUCCESS] azteca-13: Saved 34 items.
-2026-07-19 12:39:13 - INFO - [SUCCESS] canal-44-udgtv: Saved 73 items.
-2026-07-19 12:39:13 - INFO - [SUCCESS] fox: Saved 32 items.
-2026-07-19 12:39:13 - INFO - [SUCCESS] sony: Saved 42 items.
-2026-07-19 12:39:13 - INFO - [SUCCESS] xh-gc-canal-5: Saved 36 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] warner: Saved 57 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] az-corazon: Saved 29 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] a-plus: Saved 27 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] space: Saved 37 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] distrito-comedia: Saved 36 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] discovery-id: Saved 58 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] cadenatres: Saved 29 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] entertainment: Saved 58 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] universal-channel: Saved 60 items.
-2026-07-19 12:39:14 - INFO - [SUCCESS] canal-4-foro-tv: Saved 41 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] proyecto-40: Saved 57 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] tlnovelas: Saved 29 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] axn: Saved 58 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] cinecanal: Saved 22 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] cinemax: Saved 38 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] a-e-mundo: Saved 98 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] el-gourmet: Saved 81 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] canal-4: Saved 3 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] discovery-kids: Saved 168 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] golden: Saved 28 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] tve: Saved 58 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] galavision: Saved 35 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] hbo-oeste: Saved 27 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] golden-edge: Saved 28 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] azteca-7: Saved 38 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] hbo-plus-mexico: Saved 27 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] national-geographic: Saved 54 items.
-2026-07-19 12:39:15 - INFO - [SUCCESS] fox-sports: Saved 40 items.
-2026-07-19 12:39:16 - INFO - [SUCCESS] fox-sports-3: Saved 32 items.
-2026-07-19 12:39:16 - INFO - [SUCCESS] tvc-cine-mexicano-cmc: Saved 40 items.
-2026-07-19 12:39:16 - INFO - [SUCCESS] disney: Saved 100 items.
-2026-07-19 12:39:16 - INFO - [SUCCESS] discovery-home-and-health: Saved 55 items.
-2026-07-19 12:39:16 - INFO - [SUCCESS] tooncast: Saved 228 items.
-2026-07-19 12:39:16 - INFO - [SUCCESS] comedy-central: Saved 130 items.
-2026-07-19 12:39:16 - INFO - Saved all-channel.json with 53 channels for today.
-2026-07-19 12:39:16 - INFO - 
+2026-07-20 13:30:13 - INFO - Starting schedule scraping for 60 channels using 20 workers...
+2026-07-20 13:30:14 - ERROR - [FAILED] antena3: No shows today or tomorrow
+2026-07-20 13:30:14 - ERROR - [FAILED] nuestra-tele-noticias-24hs: No shows today or tomorrow
+2026-07-20 13:30:15 - INFO - [SUCCESS] xeipn-canal-11: Saved 26 items.
+2026-07-20 13:30:15 - ERROR - [FAILED] canal-21-nacional: No shows today or tomorrow
+2026-07-20 13:30:15 - INFO - [SUCCESS] canal-22-conaculta: Saved 49 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] tv-unam: Saved 41 items.
+2026-07-20 13:30:15 - ERROR - [FAILED] bbc-world: No shows today or tomorrow
+2026-07-20 13:30:15 - ERROR - [FAILED] golf-channel: No shows today or tomorrow
+2026-07-20 13:30:15 - INFO - [SUCCESS] espn: Saved 30 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] tnt-hd: Saved 32 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] history: Saved 68 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] el-financiero-bloomberg: Saved 41 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] cnn-en-espanol: Saved 45 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] de-pelicula: Saved 29 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] fx: Saved 25 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] tcm: Saved 36 items.
+2026-07-20 13:30:15 - INFO - [SUCCESS] discovery-channel: Saved 53 items.
+2026-07-20 13:30:16 - INFO - [SUCCESS] xh-gc-canal-5: Saved 41 items.
+2026-07-20 13:30:16 - INFO - [SUCCESS] canal-5-galavision: Saved 30 items.
+2026-07-20 13:30:16 - INFO - [SUCCESS] azteca-13: Saved 36 items.
+2026-07-20 13:30:16 - INFO - [SUCCESS] canal-44-udgtv: Saved 72 items.
+2026-07-20 13:30:16 - INFO - [SUCCESS] discovery-kids: Saved 173 items.
+2026-07-20 13:30:16 - ERROR - [FAILED] galicia-tv: No shows today or tomorrow
+2026-07-20 13:30:16 - INFO - [SUCCESS] universal-channel: Saved 60 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] a-plus: Saved 31 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] proyecto-40: Saved 61 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] canal-4-foro-tv: Saved 42 items.
+2026-07-20 13:30:17 - ERROR - [FAILED] hola-tv: No shows today or tomorrow
+2026-07-20 13:30:17 - INFO - [SUCCESS] canal-de-las-estrellas-xew: Saved 44 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] cadenatres: Saved 35 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] sony: Saved 44 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] warner: Saved 74 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] axn: Saved 58 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] fox: Saved 35 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] a-e-mundo: Saved 113 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] entertainment: Saved 56 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] discovery-id: Saved 58 items.
+2026-07-20 13:30:17 - INFO - [SUCCESS] az-corazon: Saved 42 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] el-gourmet: Saved 85 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] space: Saved 36 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] cinemax: Saved 35 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] distrito-comedia: Saved 43 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] hbo-oeste: Saved 26 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] azteca-7: Saved 48 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] tlnovelas: Saved 42 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] fox-sports: Saved 47 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] cinecanal: Saved 23 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] tve: Saved 57 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] canal-4: Saved 3 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] national-geographic: Saved 53 items.
+2026-07-20 13:30:18 - INFO - [SUCCESS] golden: Saved 27 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] galavision: Saved 30 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] tooncast: Saved 237 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] disney: Saved 108 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] golden-edge: Saved 28 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] hbo-plus-mexico: Saved 27 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] tvc-cine-mexicano-cmc: Saved 39 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] discovery-home-and-health: Saved 55 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] fox-sports-3: Saved 34 items.
+2026-07-20 13:30:19 - INFO - [SUCCESS] comedy-central: Saved 129 items.
+2026-07-20 13:30:19 - INFO - Saved all-channel.json with 53 channels for today.
+2026-07-20 13:30:19 - INFO - 
 ========================================
 EPG.LOGO SUMMARY - SCRAPING COMPLETED
 ========================================
 Successfully configured channels (53):
-  xeipn-canal-11, canal-5-galavision, cnn-en-espanol, discovery-channel, de-pelicula, canal-22-conaculta, tv-unam, tnt-hd, fx, espn, tcm, el-financiero-bloomberg, history, canal-de-las-estrellas-xew, azteca-13, canal-44-udgtv, fox, sony, xh-gc-canal-5, warner, az-corazon, a-plus, space, distrito-comedia, discovery-id, cadenatres, entertainment, universal-channel, canal-4-foro-tv, proyecto-40, tlnovelas, axn, cinecanal, cinemax, a-e-mundo, el-gourmet, canal-4, discovery-kids, golden, tve, galavision, hbo-oeste, golden-edge, azteca-7, hbo-plus-mexico, national-geographic, fox-sports, fox-sports-3, tvc-cine-mexicano-cmc, disney, discovery-home-and-health, tooncast, comedy-central
+  xeipn-canal-11, canal-22-conaculta, tv-unam, espn, tnt-hd, history, el-financiero-bloomberg, cnn-en-espanol, de-pelicula, fx, tcm, discovery-channel, xh-gc-canal-5, canal-5-galavision, azteca-13, canal-44-udgtv, discovery-kids, universal-channel, a-plus, proyecto-40, canal-4-foro-tv, canal-de-las-estrellas-xew, cadenatres, sony, warner, axn, fox, a-e-mundo, entertainment, discovery-id, az-corazon, el-gourmet, space, cinemax, distrito-comedia, hbo-oeste, azteca-7, tlnovelas, fox-sports, cinecanal, tve, canal-4, national-geographic, golden, galavision, tooncast, disney, golden-edge, hbo-plus-mexico, tvc-cine-mexicano-cmc, discovery-home-and-health, fox-sports-3, comedy-central
 ----------------------------------------
 FAILED CHANNELS (7) >>> REQUIRES ATTENTION:
-  - golf-channel
-  - canal-21-nacional
   - antena3
-  - bbc-world
   - nuestra-tele-noticias-24hs
+  - canal-21-nacional
+  - bbc-world
+  - golf-channel
   - galicia-tv
   - hola-tv
 ========================================
-2026-07-19 12:39:16 - INFO - Scanning JSON files for logos...
-2026-07-19 12:39:16 - INFO - Found 1228 unique images to download.
-2026-07-19 12:39:16 - INFO - Starting downloads with 50 threads...
-2026-07-19 12:39:16 - INFO - [50/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [100/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [150/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [200/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [250/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [300/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [350/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [400/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [450/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [500/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [550/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [600/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [650/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [700/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [750/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [800/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [850/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [900/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [950/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [1000/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [1050/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [1100/1228] Downloaded: Already downloaded
-2026-07-19 12:39:16 - INFO - [1150/1228] Downloaded: Already downloaded
-2026-07-19 12:39:17 - INFO - [1200/1228] Downloaded: 3.4 KB
-2026-07-19 12:39:17 - INFO - [1228/1228] Downloaded: 7.5 KB
-2026-07-19 12:39:17 - INFO - Download summary: 1228 successful, 0 failed.
-2026-07-19 12:39:17 - INFO - Updating 53 JSON files...
-2026-07-19 12:39:17 - INFO - Done! Image scraping & replacement complete.
+2026-07-20 13:30:19 - INFO - Scanning JSON files for logos...
+2026-07-20 13:30:19 - INFO - Found 1169 unique images to download.
+2026-07-20 13:30:19 - INFO - Starting downloads with 50 threads...
+2026-07-20 13:30:20 - INFO - [50/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [100/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [150/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [200/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [250/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [300/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [350/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [400/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [450/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [500/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [550/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [600/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [650/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [700/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [750/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [800/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [850/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [900/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [950/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [1000/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [1050/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [1100/1169] Downloaded: Already downloaded
+2026-07-20 13:30:20 - INFO - [1150/1169] Downloaded: 2.0 KB
+2026-07-20 13:30:20 - INFO - [1169/1169] Downloaded: 5.8 KB
+2026-07-20 13:30:20 - INFO - Download summary: 1169 successful, 0 failed.
+2026-07-20 13:30:20 - INFO - Updating 53 JSON files...
+2026-07-20 13:30:20 - INFO - Done! Image scraping & replacement complete.
