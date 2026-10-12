@@ -1,13 +1,161 @@
 import os
 import re
 import json
-import requests
 import logging
-from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, timezone
 import concurrent.futures
 
-CDN_BASE = "https://cdn.programaciontv.com.mx/wp-content/uploads/downloaded-images"
+import gzip
+import xml.etree.ElementTree as ET
+import importlib.util
+import subprocess
+import sys
+
+
+def install_dependencies():
+    """Install missing packages using this interpreter, including the image job."""
+    packages = {"requests": "requests", "bs4": "beautifulsoup4", "PIL": "Pillow"}
+    missing = [package for module, package in packages.items()
+               if importlib.util.find_spec(module) is None]
+    if missing:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", *missing])
+
+
+if __name__ == "__main__":
+    install_dependencies()
+
+import requests
+from bs4 import BeautifulSoup
+
+DEFAULT_URL = 'https://iptv-epg.org/files/epg-mx.xml'
+
+
+def timestamp(value):
+    parts = value.split()
+    dt = datetime.strptime(parts[0], '%Y%m%d%H%M%S')
+    return dt.replace(tzinfo=timezone.utc) if len(parts) == 1 else datetime.strptime(value, '%Y%m%d%H%M%S %z')
+
+
+def localized(element, tag):
+    nodes = element.findall(tag)
+    return next((n.text or '' for n in nodes if n.get('lang', '').startswith('es')), nodes[0].text or '' if nodes else '')
+
+
+def localized_values(element, tag):
+    nodes = element.findall(tag)
+    spanish = [node for node in nodes if node.get('lang', '').lower().startswith('es')]
+    return list(dict.fromkeys((node.text or '').strip() for node in (spanish or nodes) if (node.text or '').strip()))
+
+
+class XMLTVFeed:
+    def __init__(self, data):
+        if data.startswith(b'\x1f\x8b'):
+            data = gzip.decompress(data)
+        root = ET.fromstring(data)
+        if root.tag != 'tv':
+            raise ValueError('Expected an XMLTV <tv> document')
+        self.channels = {}
+        self.names = {}
+        self.ids = {}
+        for channel in root.findall('channel'):
+            cid = channel.attrib['id']
+            self.channels[cid] = []
+            self.ids.setdefault(cid.casefold(), set()).add(cid)
+            name = localized(channel, 'display-name') or cid.removesuffix('.mx')
+            self.names[cid] = re.sub(r'^MX\s*-\s*', '', name.strip(), flags=re.I)
+        self.skipped = 0
+        for programme in root.findall('programme'):
+            try:
+                start = timestamp(programme.attrib['start'])
+                stop = timestamp(programme.attrib['stop']) if programme.get('stop') else None
+                if stop is not None and stop <= start:
+                    raise ValueError('Invalid programme duration')
+                icon = programme.find('icon')
+                show = dict(name=localized(programme, 'title') or 'Unknown',
+                            category='/'.join(localized_values(programme, 'category')),
+                            release_year=(programme.findtext('date') or '').strip()[:4],
+                            description=localized(programme, 'desc'),
+                            episode_number=localized(programme, 'episode-num'),
+                            logo=icon.get('src', '') if icon is not None else '',
+                            start_dt=start, end_dt=stop)
+                self.channels.setdefault(programme.attrib['channel'], []).append(show)
+            except (KeyError, ValueError, IndexError):
+                self.skipped += 1
+        for cid, shows in self.channels.items():
+            shows.sort(key=lambda s: s['start_dt'])
+            for i, show in enumerate(shows):
+                if show['end_dt'] is None:
+                    following = next((s['start_dt'] for s in shows[i + 1:] if s['start_dt'] > show['start_dt']), None)
+                    show['end_dt'] = following or show['start_dt'] + timedelta(hours=1)
+
+    @classmethod
+    def download(cls, url=DEFAULT_URL):
+        response = requests.get(url, timeout=(15, 90))
+        response.raise_for_status()
+        # requests already handles HTTP Content-Encoding; magic bytes identify .gz bodies.
+        return cls(response.content)
+
+    def channel_id(self, xmltv_id):
+        requested = xmltv_id if xmltv_id.lower().endswith('.mx') else xmltv_id + '.mx'
+        if requested in self.channels:
+            return requested
+        matches = self.ids.get(requested.casefold(), set())
+        return next(iter(matches)) if len(matches) == 1 else None
+
+    def shows(self, xmltv_id, tz):
+        cid = self.channel_id(xmltv_id)
+        return [dict(show, start_dt=show['start_dt'].astimezone(tz),
+                     end_dt=show['end_dt'].astimezone(tz)) for show in self.channels.get(cid, [])]
+
+
+def read_channels(path):
+    channels = {}
+    with open(path, encoding='utf-8') as source:
+        for number, line in enumerate(source, 1):
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            slug, separator, xmltv_id = line.partition('=')
+            slug, xmltv_id = slug.strip(), xmltv_id.strip()
+            if not separator or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', slug) or not xmltv_id:
+                raise ValueError(f'{path}:{number}: expected mi.tv-slug=XMLTV-ID')
+            if slug in channels:
+                raise ValueError(f'{path}:{number}: duplicate channel {slug}')
+            channels[slug] = xmltv_id
+    return channels
+
+
+def format_xmltv_schedule(channel, feed, xmltv_id, now=None):
+    now = now or datetime.now(MX_TZ)
+    today = now.date()
+    yesterday = today - timedelta(days=1)
+    tomorrow = today + timedelta(days=1)
+    cutoff = datetime.combine(yesterday, datetime.min.time()).replace(tzinfo=MX_TZ) + timedelta(hours=23)
+    cid = feed.channel_id(xmltv_id)
+    output = {'channel': feed.names.get(cid, xmltv_id)}
+    seen = set()
+    for show in feed.shows(xmltv_id, MX_TZ):
+        date = show['start_dt'].date()
+        if date not in (today, tomorrow) and not (date == yesterday and show['end_dt'] > cutoff):
+            continue
+        item = {
+            'show': show['name'],
+            'category': show['category'],
+            'logo': show['logo'],
+            'start': show['start_dt'].strftime('%H:%M'),
+            'end': show['end_dt'].strftime('%H:%M'),
+            'release_year': show['release_year'],
+            'description': show['description'],
+            'episode_number': show['episode_number'],
+        }
+        identity = (show['start_dt'], show['end_dt'], json.dumps(item, sort_keys=True))
+        if identity not in seen:
+            output.setdefault(date.isoformat(), []).append(item)
+            seen.add(identity)
+    return output
+
+
+CDN_BASE = os.environ.get("IMAGE_CDN_BASE", "https://cdn.programaciontv.com.mx/wp-content/uploads/downloaded-images").rstrip("/")
 
 def slugify(text):
     text = text.lower()
@@ -29,7 +177,9 @@ file_handler = logging.FileHandler(LOG_FILE, mode='w', encoding='utf-8')
 console_handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 file_handler.setFormatter(formatter)
-console_handler.setFormatter(formatter)
+console_handler.setFormatter(logging.Formatter('%(terminal)s'))
+console_handler.addFilter(lambda record: hasattr(record, 'terminal'))
+logger.propagate = False
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
@@ -50,7 +200,7 @@ def fetch_schedule_page(channel, rel_day):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         "Accept": "text/html"
     }
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, timeout=(15, 45))
     if response.status_code == 200:
         return response.text
     return ""
@@ -154,6 +304,14 @@ def generate_channel_schedule(channel):
     if sorted_shows:
         sorted_shows[-1]["end_dt"] = sorted_shows[-1]["start_dt"] + timedelta(minutes=60)
         
+    return format_schedule(channel, sorted_shows, now)
+
+
+def format_schedule(channel, sorted_shows, now=None):
+    now = now or datetime.now(MX_TZ)
+    yesterday = (now - timedelta(days=1)).date()
+    today = now.date()
+    tomorrow = (now + timedelta(days=1)).date()
     # Keep only shows occurring today or tomorrow
     # Group them by date
     final_output = {
@@ -203,9 +361,22 @@ def generate_channel_schedule(channel):
         
     return final_output
 
-def process_channel(channel, schedule_dir):
+def process_channel(channel, schedule_dir, primary=None, xmltv_id=None):
     try:
-        schedule = generate_channel_schedule(channel)
+        schedule = {}
+        today = datetime.now(MX_TZ).date().isoformat()
+        if primary is not None:
+            try:
+                schedule = format_xmltv_schedule(channel, primary, xmltv_id or channel)
+            except Exception as exc:
+                logger.warning(f"IPTV failed for {channel}: {exc}")
+        source = "IPTV"
+        if schedule.get(today):
+            logger.info(f"[IPTV] {channel}: Using XMLTV schedule.")
+        else:
+            logger.info(f"[FALLBACK] {channel}: No usable IPTV schedule today; trying mi.tv.")
+            source = "mi.tv"
+            schedule = generate_channel_schedule(channel)
         if schedule:
             # Check if there's actually any item
             has_items = sum(len(shows) for key, shows in schedule.items() if isinstance(shows, list)) > 0
@@ -217,6 +388,8 @@ def process_channel(channel, schedule_dir):
                 json.dump(schedule, f, ensure_ascii=False, separators=(',', ':'))
                 
             total_items = sum(len(shows) for key, shows in schedule.items() if isinstance(shows, list))
+            logger.info(f"Saved {channel} from {source}: {total_items} items",
+                        extra={"terminal": f"{channel} — {source}"})
             return channel, True, total_items, schedule
         else:
             return channel, False, "No schedule parsed", None
@@ -225,21 +398,31 @@ def process_channel(channel, schedule_dir):
 
 def main():
     if not os.path.exists(BASE_DIR):
-        logger.error(f"Base dir {BASE_DIR} not found.")
+        logger.error(f"Base dir {BASE_DIR} not found.", extra={"terminal": "Failed: project directory missing."})
         return
         
-    schedule_dir = os.path.join(BASE_DIR, "schedule")
+    schedule_dir = os.environ.get("SCHEDULE_DIR", os.path.join(BASE_DIR, "schedule"))
     if not os.path.exists(schedule_dir):
         os.makedirs(schedule_dir)
         
     filter_file = os.path.join(BASE_DIR, "filter.txt")
     if not os.path.exists(filter_file):
-        logger.error(f"Error: {filter_file} not found.")
+        logger.error(f"Error: {filter_file} not found.", extra={"terminal": "Failed: filter.txt missing."})
         return
         
-    with open(filter_file, "r") as f:
-        channels = [line.strip() for line in f if line.strip()]
-        
+    try:
+        channels = read_channels(filter_file)
+    except ValueError as exc:
+        logger.error(str(exc), extra={"terminal": f"Invalid filter.txt: {exc}"})
+        return
+    primary = None
+    try:
+        primary = XMLTVFeed.download(os.environ.get("XMLTV_URL", DEFAULT_URL))
+        logger.info(f"Loaded IPTV primary: {len(primary.channels)} channels; {primary.skipped} invalid programmes skipped.")
+    except Exception as exc:
+        logger.warning(f"IPTV unavailable; falling back to mi.tv: {exc}",
+                       extra={"terminal": "IPTV unavailable — using mi.tv."})
+
     successful = []
     failed = []
     
@@ -250,10 +433,11 @@ def main():
     today_str = datetime.now(MX_TZ).date().isoformat()
     
     # Process multiple channels in parallel
-    logger.info(f"Starting schedule scraping for {len(channels)} channels using {max_workers} workers...")
+    logger.info(f"Starting schedule scraping for {len(channels)} channels using {max_workers} workers...",
+                extra={"terminal": f"Scraping {len(channels)} channels..."})
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_channel = {
-            executor.submit(process_channel, ch, schedule_dir): ch for ch in channels
+            executor.submit(process_channel, ch, schedule_dir, primary, channels[ch]): ch for ch in channels
         }
         for future in concurrent.futures.as_completed(future_to_channel):
             ch = future_to_channel[future]
@@ -277,7 +461,7 @@ def main():
                         today_shows.append(show_copy)
                     all_channels_today[ch] = today_shows
             else:
-                logger.error(f"[FAILED] {ch}: {result}")
+                logger.error(f"[FAILED] {ch}: {result}", extra={"terminal": f"{ch} — FAILED"})
                 failed.append(ch)
                 
     if all_channels_today:
@@ -302,7 +486,7 @@ def main():
         summary_msg += "ALL CHANNELS PROCESSED SUCCESSFULLY!\n"
     summary_msg += "="*40
     
-    logger.info(summary_msg)
+    logger.info(summary_msg, extra={"terminal": f"Done: {len(successful)} saved, {len(failed)} failed."})
 
 if __name__ == "__main__":
     main()

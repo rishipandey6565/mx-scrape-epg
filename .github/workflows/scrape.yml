@@ -6,94 +6,88 @@ on:
     - cron: '50 11 * * *'
   workflow_dispatch:
 
+# One writer at a time for the shared image database and VPS files.
+concurrency:
+  group: mexico-epg-vps
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
 jobs:
-  scrape-and-update:
+  scrape-and-upload:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-    permissions:
-      contents: write
-      
+      SCHEDULE_DIR: ${{ github.workspace }}/run-schedule
+      IMAGE_DB_PATH: ${{ github.workspace }}/image-state/images.sqlite3
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        
+        with:
+          persist-credentials: false
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          cache: 'pip'
-          
-      - name: Install Dependencies
+
+      - name: Install transfer tools
+        run: sudo apt-get update && sudo apt-get install -y sshpass rsync
+
+      - name: Restore image database and images from VPS
+        env:
+          SSHPASS: ${{ secrets.VPS_PASSWORD }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_IP: ${{ secrets.VPS_IP }}
+        shell: bash
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          
+          set -euo pipefail
+          mkdir -p image-state downloaded-images "$SCHEDULE_DIR"
+          sshpass -e ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_IP" '
+            set -e
+            mkdir -p /data/programaciontv/image-state /data/programaciontv/wp-content/uploads/downloaded-images
+          '
+          sshpass -e rsync -rtq -e 'ssh -o StrictHostKeyChecking=no' --include='images.sqlite3' --exclude='*' "$VPS_USERNAME@$VPS_IP:/data/programaciontv/image-state/" image-state/
+          sshpass -e rsync -rtq -e 'ssh -o StrictHostKeyChecking=no' "$VPS_USERNAME@$VPS_IP:/data/programaciontv/wp-content/uploads/downloaded-images/" downloaded-images/
+
       - name: Run Scraper Script
         env:
           SCRAPE_WORKERS: 20
         run: python scraper.py
-        
+
       - name: Run Image Downloader Script
         env:
           IMAGE_WORKERS: 50
         run: python image_downloader.py
-        
-      - name: Commit and Push Changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          if [ -d "schedule" ]; then git add schedule/; fi
-          if [ -d "downloaded-images" ]; then git add downloaded-images/; fi
-          if [ -f "scrape.log" ]; then git add scrape.log; fi
-          
-          # Only commit if there are changes
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update schedules and images [skip ci]"
-            git push
-          fi
 
       - name: Compress Data
         run: |
-          # Use -C to enter the directory before compressing so parent folders aren't included
-          if [ -d "schedule" ]; then tar -czf schedule.tar.gz -C schedule .; fi
-          if [ -d "downloaded-images" ]; then tar -czf images.tar.gz -C downloaded-images .; fi
-
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
+          set -e
+          tar -czf schedule.tar.gz -C "$SCHEDULE_DIR" .
+          tar -czf images.tar.gz -C downloaded-images .
+          tar -czf image-state.tar.gz -C image-state images.sqlite3
 
       - name: Upload Archives to VPS
         env:
           SSHPASS: ${{ secrets.VPS_PASSWORD }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_IP: ${{ secrets.VPS_IP }}
         run: |
-          if [ -f "schedule.tar.gz" ]; then
-            sshpass -e scp -o StrictHostKeyChecking=no schedule.tar.gz ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:/tmp/schedule.tar.gz
-          fi
-          if [ -f "images.tar.gz" ]; then
-            sshpass -e scp -o StrictHostKeyChecking=no images.tar.gz ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:/tmp/images.tar.gz
-          fi
+          sshpass -e scp -o StrictHostKeyChecking=no schedule.tar.gz images.tar.gz image-state.tar.gz "$VPS_USERNAME@$VPS_IP:/tmp/"
 
       - name: Extract Archives on VPS
         env:
           SSHPASS: ${{ secrets.VPS_PASSWORD }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_IP: ${{ secrets.VPS_IP }}
         run: |
-          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "
-            # Create target directories if they don't exist
-            mkdir -p /data/programaciontv/schedule
-            mkdir -p /data/programaciontv/wp-content/uploads/downloaded-images
-            
-            # Extract and remove schedule archive
-            if [ -f /tmp/schedule.tar.gz ]; then
-              tar -xzf /tmp/schedule.tar.gz -C /data/programaciontv/schedule/
-              rm /tmp/schedule.tar.gz
-            fi
-            
-            # Extract and remove images archive
-            if [ -f /tmp/images.tar.gz ]; then
-              tar -xzf /tmp/images.tar.gz -C /data/programaciontv/wp-content/uploads/downloaded-images/
-              rm /tmp/images.tar.gz
-            fi
-          "
+          sshpass -e ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_IP" '
+            set -e
+            mkdir -p /data/programaciontv/schedule /data/programaciontv/wp-content/uploads/downloaded-images /data/programaciontv/image-state
+            tar -xzf /tmp/images.tar.gz -C /data/programaciontv/wp-content/uploads/downloaded-images/
+            tar -xzf /tmp/schedule.tar.gz -C /data/programaciontv/schedule/
+            tar -xzf /tmp/image-state.tar.gz -C /data/programaciontv/image-state/
+            rm /tmp/schedule.tar.gz /tmp/images.tar.gz /tmp/image-state.tar.gz
+          '
