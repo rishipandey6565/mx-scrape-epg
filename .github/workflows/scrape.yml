@@ -33,24 +33,29 @@ jobs:
         with:
           python-version: '3.10'
 
+      # Configure SSH Key Agent for native ssh, scp, and rsync
+      - name: Set up SSH Key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Install transfer tools
-        run: sudo apt-get update && sudo apt-get install -y sshpass rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
 
       - name: Restore image database and images from VPS
         env:
-          SSHPASS: ${{ secrets.VPS_PASSWORD }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
           VPS_IP: ${{ secrets.VPS_IP }}
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p image-state downloaded-images "$SCHEDULE_DIR"
-          sshpass -e ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_IP" '
+          ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_IP" '
             set -e
             mkdir -p /data/programaciontv/image-state /data/programaciontv/wp-content/uploads/downloaded-images
           '
-          sshpass -e rsync -rtq -e 'ssh -o StrictHostKeyChecking=no' --include='images.sqlite3' --exclude='*' "$VPS_USERNAME@$VPS_IP:/data/programaciontv/image-state/" image-state/
-          sshpass -e rsync -rtq -e 'ssh -o StrictHostKeyChecking=no' "$VPS_USERNAME@$VPS_IP:/data/programaciontv/wp-content/uploads/downloaded-images/" downloaded-images/
+          rsync -rtq -e 'ssh -o StrictHostKeyChecking=no' --include='images.sqlite3' --exclude='*' "$VPS_USERNAME@$VPS_IP:/data/programaciontv/image-state/" image-state/
+          rsync -rtq -e 'ssh -o StrictHostKeyChecking=no' "$VPS_USERNAME@$VPS_IP:/data/programaciontv/wp-content/uploads/downloaded-images/" downloaded-images/
 
       - name: Run Scraper Script
         env:
@@ -71,19 +76,17 @@ jobs:
 
       - name: Upload Archives to VPS
         env:
-          SSHPASS: ${{ secrets.VPS_PASSWORD }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
           VPS_IP: ${{ secrets.VPS_IP }}
         run: |
-          sshpass -e scp -o StrictHostKeyChecking=no schedule.tar.gz images.tar.gz image-state.tar.gz "$VPS_USERNAME@$VPS_IP:/tmp/"
+          scp -o StrictHostKeyChecking=no schedule.tar.gz images.tar.gz image-state.tar.gz "$VPS_USERNAME@$VPS_IP:/tmp/"
 
       - name: Extract Archives on VPS
         env:
-          SSHPASS: ${{ secrets.VPS_PASSWORD }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
           VPS_IP: ${{ secrets.VPS_IP }}
         run: |
-          sshpass -e ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_IP" '
+          ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_IP" '
             set -e
             mkdir -p /data/programaciontv/schedule /data/programaciontv/wp-content/uploads/downloaded-images /data/programaciontv/image-state
             tar -xzf /tmp/images.tar.gz -C /data/programaciontv/wp-content/uploads/downloaded-images/
